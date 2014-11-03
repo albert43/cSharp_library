@@ -1,0 +1,4 @@
+﻿#	Library
+	#	SQLite-1.0.66.0
+	#	http://system.data.sqlite.org/index.html/doc/trunk/www/index.wiki
+

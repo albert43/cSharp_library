@@ -1,0 +1,3 @@
+﻿#	Library
+	#	JSON.NET-6.0
+		#    Because JSON.NET only support .NET v3.5 that the project can not greater than .NETv3.5.
