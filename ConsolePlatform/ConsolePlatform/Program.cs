@@ -11,6 +11,7 @@ namespace ConsolePlatform
         static void Main(string[] args)
         {
             Config();
+            Database();
         }
 
         static void Config()
@@ -18,6 +19,11 @@ namespace ConsolePlatform
             Al.Config.Sample s = new Al.Config.Sample();
             s.setSample();
             s.getSample();
+        }
+
+        static void Database()
+        {
+            Al.Database.TblStudent.InitTableStudent();
         }
     }
 }

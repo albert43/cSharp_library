@@ -21,11 +21,6 @@ namespace Al.Database
     {
         public String strColumnName;
         public DATA_T DataType;
-        public COLUMN_CONSTRAIN_S Costrnt;
-    }
-
-    public struct COLUMN_CONSTRAIN_S
-    {
         public PRIMARY_KEY_T PrimaryKey;
         public Boolean bNotNull;
         public Boolean bUnique;
@@ -362,34 +357,32 @@ namespace Al.Database
 
             for (int i = 0; i < ColumnDef.Length; i++)
             {
-                COLUMN_CONSTRAIN_S ColCostrnt = ColumnDef[i].Costrnt;
-
                 //  Foreign key
-                if (ColCostrnt.ForeignKey.strForeignTable != null)
+                if (ColumnDef[i].ForeignKey.strForeignTable != null)
                 {
                     String strColumnList = "";
-                    if (ColCostrnt.ForeignKey.strColumnName != null)
+                    if (ColumnDef[i].ForeignKey.strColumnName != null)
                     {
-                        for (int iCol = 0; iCol < ColCostrnt.ForeignKey.strColumnName.Length; iCol++)
-                            strColumnList += ColCostrnt.ForeignKey.strColumnName[iCol];
+                        for (int iCol = 0; iCol < ColumnDef[i].ForeignKey.strColumnName.Length; iCol++)
+                            strColumnList += ColumnDef[i].ForeignKey.strColumnName[iCol];
                     }
-                    strForeignKey = String.Format(FOREIGN_KEY_FMT, ColCostrnt.ForeignKey.strForeignTable, strColumnList);
+                    strForeignKey = String.Format(FOREIGN_KEY_FMT, ColumnDef[i].ForeignKey.strForeignTable, strColumnList);
                 }
 
                 //  Default value
-                if (ColCostrnt.DefaultValue != null)
+                if (ColumnDef[i].DefaultValue != null)
                 {
-                    if ((ColCostrnt.DefaultValue.m_Type == DATA_T.STRING) || (ColCostrnt.DefaultValue.m_Type == DATA_T.DATETIME))
-                        strDefaultValue = String.Format(DEFAULT_VALUE_FMT, "'" + ColCostrnt.DefaultValue, "'");
-                    else if (ColCostrnt.DefaultValue.m_Type == DATA_T.BOOLEAN)
+                    if ((ColumnDef[i].DefaultValue.m_Type == DATA_T.STRING) || (ColumnDef[i].DefaultValue.m_Type == DATA_T.DATETIME))
+                        strDefaultValue = String.Format(DEFAULT_VALUE_FMT, "'" + ColumnDef[i].DefaultValue, "'");
+                    else if (ColumnDef[i].DefaultValue.m_Type == DATA_T.BOOLEAN)
                         //  SQLite doesn't have boolean type.
-                        strDefaultValue = String.Format(DEFAULT_VALUE_FMT, ColCostrnt.DefaultValue.m_b == true ? 1 : 0);
-                    else    
-                        strDefaultValue = String.Format(DEFAULT_VALUE_FMT, ColCostrnt.DefaultValue);
+                        strDefaultValue = String.Format(DEFAULT_VALUE_FMT, ColumnDef[i].DefaultValue.m_b == true ? 1 : 0);
+                    else
+                        strDefaultValue = String.Format(DEFAULT_VALUE_FMT, ColumnDef[i].DefaultValue);
                 }
 
                 //  Primary key: ColCostrnt.PrimaryKey is always true that haven't not be check.
-                switch (ColCostrnt.PrimaryKey)
+                switch (ColumnDef[i].PrimaryKey)
                 {
                     case PRIMARY_KEY_T.AUTO_INCREASE:
                         strPrimaryKey = String.Format(PRIMARY_KEY_FMT, ASC_TAG, AUTOINCREMENT_TAG);
@@ -409,9 +402,9 @@ namespace Al.Database
                 //  Column constraint.
                 strColumnConstraint = String.Format(
                     COLUMN_CONSTRAINT_FMT, 
-                    strPrimaryKey, 
-                    ColCostrnt.bNotNull == true ? NOT_NULL_TAG : null,
-                    ColCostrnt.bUnique == true ? UNIQUE_TAG : null,
+                    strPrimaryKey,
+                    ColumnDef[i].bNotNull == true ? NOT_NULL_TAG : null,
+                    ColumnDef[i].bUnique == true ? UNIQUE_TAG : null,
                     strDefaultValue,
                     strForeignKey
                 );
